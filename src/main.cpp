@@ -2,19 +2,48 @@
 #include <string>
 #include <fstream>
 #include <filesystem>
+#include <stdio.h>
+#include <unistd.h>
 
 #include "include/TBBTools.h"
 
-int main(int argc, const char* argv[])
+int main(int argc, char* const argv[])
 {
+    std::string conf_file="";
+    std::string target_dir="";
     std::string sname = "";
     int count = 0;
     int start = 0;
     int end  = 0;
     int found = 0;
 
-    std::string conf_file="/media/DevHDD/C++/vhost_extractor/test.conf";
-    std::string target_dir="/tmp/vhosts";
+    while(1)
+    {
+        int result = getopt(argc, argv, "i:o:");
+        if (result == -1) break;
+        switch (result)
+        {
+            case '?': /* unknown parameter */
+                break;
+            case ':': /* missing argument of a parameter */
+                fprintf(stderr, "missing argument.\n");
+                break;
+            case 'i':
+                conf_file = optarg;
+                break;
+            case 'o':
+                target_dir = optarg;
+                break;
+            default: /* unknown */
+                break;
+        }
+    }
+
+    if (conf_file == "" || target_dir == "")
+    {
+        std::cerr << "Syntax error! Please specify input file (-i) and output directory (-o)!" << std::endl;
+        return EXIT_FAILURE;
+    }
 
     if (!std::filesystem::exists(conf_file))
     {
