@@ -8,6 +8,22 @@
 #include "include/TBBTools.h"
 #include "include/THosts.h"
 
+std::string extractServerName(std::string line)
+{
+    std::string delimiter = "=";
+    std::string n_line = line;
+    size_t pos = 0;
+    std::string token = "";
+    int count = 0;
+    while ((pos = n_line.find(delimiter)) != std::string::npos)
+    {
+        count++;
+        token = n_line.substr(0, pos);
+        n_line.erase(0, pos + delimiter.length());
+    }
+    return n_line;
+}
+
 bool verifyArgs(std::string input, std::string output)
 {
     if (input == "" || output == "")
@@ -39,6 +55,7 @@ bool verifyArgs(std::string input, std::string output)
 
 bool parseHosts(std::string input, std::vector<THosts> *host_list)
 {
+    std::string server_name = "";
     int count = 0;
     int start = 0;
     int end  = 0;
@@ -52,7 +69,9 @@ bool parseHosts(std::string input, std::vector<THosts> *host_list)
         for (std::string line; getline(infile, line); )
         {
             count++;
-            if (TBBTools::findString(TBBTools::toLower(line), "<virtualhost")) 
+            std::string n_line = TBBTools::toLower(TBBTools::trim(line, " \t"));
+            if (n_line.size() > 0 && TBBTools::checkHashtag(n_line)) continue;            
+            if (TBBTools::findString(TBBTools::toLower(n_line), "<virtualhost")) 
             {
                 start = count;
                 if (end > 0)
@@ -60,9 +79,13 @@ bool parseHosts(std::string input, std::vector<THosts> *host_list)
                     end = 0;
                 }
             } 
-            else if (TBBTools::findString(TBBTools::toLower(line), "</virtualhost>")) 
+            else if (TBBTools::findString(TBBTools::toLower(n_line), "</virtualhost>")) 
             {
                 end = count;
+            }
+            else if (TBBTools::findString(TBBTools::toLower(line), "servername"))
+            {
+                server_name = extractServerName(n_line);
             }
 
             if (start > 0 && end > 0) 
@@ -71,10 +94,11 @@ bool parseHosts(std::string input, std::vector<THosts> *host_list)
                 THosts host;
                 host.start_line = start;
                 host.end_line = end;
-                host.server_name = "vhost " + std::to_string(found);
+                host.server_name = server_name;
                 host_list->push_back(host);
                 start = 0;
                 end = 0;
+                server_name = "";
             }
         }
     }
@@ -90,7 +114,6 @@ int main(int argc, char* const argv[])
 {
     std::string conf_file="";
     std::string target_dir="";
-    std::string sname = "";
     std::vector<THosts> host_list;
 
     while(1)

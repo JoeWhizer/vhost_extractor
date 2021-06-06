@@ -13,4 +13,7 @@ class TBBTools
         static std::string toUpper(std::string text);
         static int getLineNumbers(std::string filename);
         static std::string formatLine(int line, int maxlines, std::string prefix);
+        static std::string trim(const std::string& str, const std::string& whitespace);
+        static std::string reduce(const std::string& str,const std::string& fill,const std::string& whitespace);
+        static bool checkHashtag(std::string line);
 };
