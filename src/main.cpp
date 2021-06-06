@@ -9,7 +9,7 @@
 
 void usage()
 {
-    std::cout << "vhost_extractor v0.1\n";
+    std::cout << "vhost_extractor v1.0\n";
     std::cout << "Usage: vhost_extractor -i /path/to/apache.conf -o /path/to/output/dir\n\n";
     std::cout << "Options:\n";
     std::cout << "-i /path/to/apache.conf   - Full path to the configuration that you want to parse\n";
