@@ -4,24 +4,22 @@
 #include <filesystem>
 #include <unistd.h>
 #include <vector>
-#include <variant>
 #include "include/TBBTools.h"
 #include "include/THosts.h"
 
 std::string extractServerName(std::string line)
 {
     std::string delimiter = "=";
-    std::string n_line = line;
     size_t pos = 0;
     std::string token = "";
     int count = 0;
-    while ((pos = n_line.find(delimiter)) != std::string::npos)
+    while ((pos = line.find(delimiter)) != std::string::npos)
     {
         count++;
-        token = n_line.substr(0, pos);
-        n_line.erase(0, pos + delimiter.length());
+        token = line.substr(0, pos);
+        line.erase(0, pos + delimiter.length());
     }
-    return n_line;
+    return line;
 }
 
 bool verifyArgs(std::string input, std::string output)
@@ -146,7 +144,9 @@ int main(int argc, char* const argv[])
         std::cout << host_list.size() << " virtual hosts found!" << std::endl;
         for (int i = 0; i < host_list.size(); i++)
         {
-            std::cout << "Host: " << host_list[i].server_name << " -- From line " << host_list[i].start_line << " to line " << host_list[i].end_line << std::endl;
+            std::cout << "Host: " << host_list[i].server_name << 
+                         " -- From line " << host_list[i].start_line << 
+                         " to line " << host_list[i].end_line << std::endl;
         }
     } 
     else 
