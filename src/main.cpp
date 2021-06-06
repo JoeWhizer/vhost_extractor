@@ -7,9 +7,8 @@
 #include "include/TBBTools.h"
 #include "include/THosts.h"
 
-std::string extractServerName(std::string line)
+std::string extractLastEntrybyDelimiter(std::string line, std::string delimiter, bool removeLastChar = false)
 {
-    std::string delimiter = "=";
     size_t pos = 0;
     std::string token = "";
     int count = 0;
@@ -19,23 +18,9 @@ std::string extractServerName(std::string line)
         token = line.substr(0, pos);
         line.erase(0, pos + delimiter.length());
     }
-    return line;
-}
+    if (removeLastChar)
+        line = line.substr(0, line.size() -1);
 
-std::string extractServerPort(std::string line)
-{
-    std::string delimiter = ":";
-    size_t pos = 0;
-    std::string token = "";
-    int count = 0;
-    while ((pos = line.find(delimiter)) != std::string::npos)
-    {
-        count++;
-        token = line.substr(0, pos);
-        line.erase(0, pos + delimiter.length());
-    }
-    // remove last character '>'
-    line = line.substr(0, line.size() -1);
     return line;
 }
 
@@ -99,7 +84,7 @@ bool parseHosts(std::string inputFile, std::vector<THosts> *host_list)
 
                 if (TBBTools::findString(n_line, ":"))
                 {
-                    server_port = extractServerPort(n_line);
+                    server_port = extractLastEntrybyDelimiter(n_line, ":", true);
                 }
             } 
             else if (TBBTools::findString(n_line, "</virtualhost>")) 
@@ -108,7 +93,7 @@ bool parseHosts(std::string inputFile, std::vector<THosts> *host_list)
             }
             else if (TBBTools::findString(n_line, "servername"))
             {
-                server_name = extractServerName(n_line);
+                server_name = extractLastEntrybyDelimiter(n_line, "=");
             }
 
             if (start > 0 && end > 0) 
