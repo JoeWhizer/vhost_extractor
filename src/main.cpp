@@ -39,26 +39,26 @@ std::string extractServerPort(std::string line)
     return line;
 }
 
-bool verifyArgs(std::string input, std::string output)
+bool verifyArgs(std::string inputFile, std::string outputPath)
 {
-    if (input == "" || output == "")
+    if (inputFile == "" || outputPath == "")
     {
         std::cerr << "Syntax error! Please specify input file (-i) and output directory (-o)!" << std::endl;
         return false;
     }
 
-    if (!std::filesystem::exists(input))
+    if (!std::filesystem::exists(inputFile))
     {
-        std::cout << "File not found: " << input << std::endl;
+        std::cout << "File not found: " << inputFile << std::endl;
         return false;
     }
 
-    if (!std::filesystem::exists(output))
+    if (!std::filesystem::exists(outputPath))
     {
         try
         {
-            std::cout << "Path not found: " << output << " - creating directory...";
-            std::filesystem::create_directories(output);
+            std::cout << "Path not found: " << outputPath << " - creating directory...";
+            std::filesystem::create_directories(outputPath);
             std::cout << "done" << std::endl;
         }
         catch(const std::exception& e)
@@ -70,7 +70,7 @@ bool verifyArgs(std::string input, std::string output)
     return true;
 }
 
-bool parseHosts(std::string input, std::vector<THosts> *host_list)
+bool parseHosts(std::string inputFile, std::vector<THosts> *host_list)
 {
     std::string server_name = "";
     std::string server_port = "";
@@ -83,7 +83,7 @@ bool parseHosts(std::string input, std::vector<THosts> *host_list)
     infile.exceptions(std::ifstream::badbit);
     try
     {
-        infile.open(input);
+        infile.open(inputFile);
         for (std::string line; getline(infile, line); )
         {
             count++;
