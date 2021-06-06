@@ -68,7 +68,7 @@ int TBBTools::getLineNumbers(std::string filename)
     return count;
 }
 
-std::string TBBTools::formatLine(int line, int maxlines)
+std::string TBBTools::formatLine(int line, int maxlines, std::string prefix="Line")
 {
     std::string separator = "";
     int diff = maxlines - line;
@@ -78,5 +78,5 @@ std::string TBBTools::formatLine(int line, int maxlines)
         separator += "0";
     }
 
-    return "Line " + separator + std::to_string(line) + ": ";
+    return prefix + " " + separator + std::to_string(line) + ": ";
 }

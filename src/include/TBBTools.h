@@ -12,5 +12,5 @@ class TBBTools
         static std::string toLower(std::string text);
         static std::string toUpper(std::string text);
         static int getLineNumbers(std::string filename);
-        static std::string formatLine(int line, int maxlines);
+        static std::string formatLine(int line, int maxlines, std::string prefix="Line");
 };
