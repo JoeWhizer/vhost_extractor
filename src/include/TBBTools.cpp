@@ -71,7 +71,7 @@ int TBBTools::getLineNumbers(std::string filename)
 std::string TBBTools::formatLine(int line, int maxlines, std::string prefix="Line")
 {
     std::string separator = "";
-    int diff = maxlines - line;
+    int diff = countDigit(maxlines) - countDigit(line);
 
     for (int i = 0; i < diff; i++)
     {
