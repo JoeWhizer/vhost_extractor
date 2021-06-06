@@ -2,16 +2,24 @@
 #include <string>
 #include <fstream>
 #include <filesystem>
-#include <stdio.h>
 #include <unistd.h>
-
+#include <vector>
+#include <variant>
 #include "include/TBBTools.h"
+#include "include/THosts.h"
+
+template <typename NewElem, typename... TupleElem> 
+std::tuple<TupleElem..., NewElem> tuple_append(const std::tuple<TupleElem...> &tup, const NewElem &el) 
+{
+    return std::tuple_cat(tup, std::make_tuple(el));
+}
 
 int main(int argc, char* const argv[])
 {
     std::string conf_file="";
     std::string target_dir="";
     std::string sname = "";
+    std::vector<THosts> host_list;
     int count = 0;
     int start = 0;
     int end  = 0;
@@ -87,9 +95,14 @@ int main(int argc, char* const argv[])
 
             if (start > 0 && end > 0) 
             {
+                found++;
+                THosts host;
+                host.start_line = start;
+                host.end_line = end;
+                host.server_name = "vhost " + std::to_string(found);
+                host_list.push_back(host);
                 start = 0;
                 end = 0;
-                found++;
             }
         }
     }
@@ -102,11 +115,15 @@ int main(int argc, char* const argv[])
     if (found > 0)
     {
         std::cout << found << " virtual hosts found!" << std::endl;
+        for (int i = 0; i < host_list.size(); i++)
+        {
+            std::cout << "Host: " << host_list[i].server_name << " -- From line " << host_list[i].start_line << " to line " << host_list[i].end_line << std::endl;
+        }
     } 
     else 
     {
         std::cout << "No virtual hosts found!" << std::endl;
     }
-    
+
     return EXIT_SUCCESS;
 }
