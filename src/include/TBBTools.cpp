@@ -1,6 +1,8 @@
 #include "TBBTools.h"
 #include <algorithm>
 #include <string>
+#include <fstream>
+#include <iostream>
 
 bool TBBTools::findString(std::string input, std::string text)
 {
@@ -35,17 +37,43 @@ bool TBBTools::inRange(unsigned low, unsigned high, unsigned x)
     return  ((x-low) <= (high-low));
 }
 
-std::string TBBTools::formatLine(int count)
+int TBBTools::countDigit(int number) {
+   int count = 0;
+   while(number != 0) {
+      number = number / 10;
+      count++;
+   }
+   return count;
+}
+
+int TBBTools::getLineNumbers(std::string filename)
 {
-    std::string response = "";
-    if (inRange(0, 9, count)) {
-        response = "Line 000";
-    } else if (inRange(10, 99, count)) {
-        response = "Line 00";
-    } else if (inRange(100, 999, count)) {
-        response = "Line 0";
-    } else if (inRange(1000, 99999, count)) {
-        response = "Line ";
+    int count = 0;
+    std::ifstream infile;
+    infile.exceptions(std::ifstream::badbit);
+    try
+    {
+        infile.open(filename);
+        for (std::string line; getline(infile, line); )
+        {
+            count++;
+        }
     }
+    catch  (const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+        return -1;
+    }    
+
+    return count;
+}
+
+std::string TBBTools::formatLine(int line, int maxlines)
+{
+    std::string separator = "";
+
+    std::string response = "";
+    response = "Line " + separator;
+
     return response;
 }
