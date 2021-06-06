@@ -14,7 +14,7 @@ void usage()
     std::cout << "Options:\n";
     std::cout << "-i /path/to/apache.conf   - Full path to the configuration that you want to parse\n";
     std::cout << "-o /path/to/output/dir    - Path where extracted vhost will be stored (if not exists, it will be created)\n";
-    std::cout << "-s servername             - Extract single configuration by ServerName (not yet implemented)\n";
+    std::cout << "-s servername             - Extract single configuration by ServerName\n";
     std::cout << "-v                        - Verbose setting (prints out a result after parsing\n";
     std::cout << "-h                        - Shows this help!\n\n";
 }
@@ -133,13 +133,16 @@ bool parseHosts(std::string inputFile, std::vector<THosts> *host_list)
     return true;
 }
 
-std::vector<THosts> writeConfigFiles(std::string inputFile, std::string outputPath,std::vector<THosts> host_list)
+std::vector<THosts> writeConfigFiles(std::string inputFile, std::string outputPath,std::vector<THosts> host_list, std::string vhost_to_extract = "")
 {
     std::ifstream infile;
     std::ofstream outfile;
 
     for (int i = 0; i < host_list.size(); i++)
     {
+        if ((vhost_to_extract != "") && (TBBTools::toLower(host_list[i].server_name) != TBBTools::toLower(vhost_to_extract)))
+            continue;
+
         std::string filename = "";
         if (host_list[i].server_port != "")
             filename = host_list[i].server_name + "_" + host_list[i].server_port + ".conf";
@@ -153,6 +156,7 @@ std::vector<THosts> writeConfigFiles(std::string inputFile, std::string outputPa
             infile.open(inputFile);
             outfile.open(host_list[i].full_filename);
             int count = 0;
+
             for (std::string line; getline(infile, line); )
             {
                 if (TBBTools::inRange(host_list[i].start_line, host_list[i].end_line, ++count))
@@ -175,11 +179,12 @@ int main(int argc, char* const argv[])
     std::string conf_file="";
     std::string target_dir="";
     std::vector<THosts> host_list;
+    std::string vhost_to_extract="";
     bool verbose = false;
 
     while(1)
     {
-        int result = getopt(argc, argv, "i:o:vh");
+        int result = getopt(argc, argv, "i:o:s:vh");
         if (result == -1) break;
         switch (result)
         {
@@ -193,6 +198,9 @@ int main(int argc, char* const argv[])
                 break;
             case 'o':
                 target_dir = optarg;
+                break;
+            case 's':
+                vhost_to_extract = optarg;
                 break;
             case 'v':
                 verbose = true;
@@ -209,15 +217,19 @@ int main(int argc, char* const argv[])
 
     if (!parseHosts(conf_file, &host_list)) return EXIT_FAILURE;
 
-    host_list = writeConfigFiles(conf_file, target_dir, host_list);
+    host_list = writeConfigFiles(conf_file, target_dir, host_list, vhost_to_extract);
 
     if (!verbose) return EXIT_SUCCESS;
 
     if (host_list.size() > 0)
     {
-        std::cout << host_list.size() << " virtual hosts found!" << std::endl;
+        std::cout << host_list.size() << " virtual hosts found!\n\n";
+        std::cout << "The following hosts were extracted:\n";
         for (int i = 0; i < host_list.size(); i++)
         {
+            if (host_list[i].full_filename == "")
+                continue;
+
             std::string separator = "\t\t - ";
             if (host_list[i].server_name.size() >= 18) separator = "\t - ";
             if ( host_list[i].server_port == "" ) host_list[i].server_port = "N/A";
