@@ -150,7 +150,6 @@ std::vector<THosts> writeConfigFiles(std::string inputFile, std::string outputPa
         
         host_list[i].full_filename = outputPath;
         host_list[i].full_filename /= filename;
-        std::cout << host_list[i].full_filename << std::endl;
         try
         {
             infile.open(inputFile);
