@@ -8,12 +8,6 @@
 #include "include/TBBTools.h"
 #include "include/THosts.h"
 
-template <typename NewElem, typename... TupleElem> 
-std::tuple<TupleElem..., NewElem> tuple_append(const std::tuple<TupleElem...> &tup, const NewElem &el) 
-{
-    return std::tuple_cat(tup, std::make_tuple(el));
-}
-
 int main(int argc, char* const argv[])
 {
     std::string conf_file="";
