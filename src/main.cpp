@@ -211,10 +211,13 @@ int main(int argc, char* const argv[])
         std::cout << host_list.size() << " virtual hosts found!" << std::endl;
         for (int i = 0; i < host_list.size(); i++)
         {
-            std::cout << "Host: " << host_list[i].server_name << " - " << 
+            std::string separator = "\t\t - ";
+            if (host_list[i].server_name.size() >= 18) separator = "\t - ";
+            if ( host_list[i].server_port == "" ) host_list[i].server_port = "N/A";
+            std::cout << "Host: " << host_list[i].server_name << separator << 
                          "Port: " << host_list[i].server_port <<
                          " -- From line " << host_list[i].start_line << 
-                         " to line " << host_list[i].end_line << " - " <<
+                         " to line " << host_list[i].end_line << "\t\t - " <<
                          "Filename: " << host_list[i].full_filename << std::endl;
         }
     } 
