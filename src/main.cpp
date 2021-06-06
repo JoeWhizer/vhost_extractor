@@ -177,10 +177,11 @@ int main(int argc, char* const argv[])
     std::string conf_file="";
     std::string target_dir="";
     std::vector<THosts> host_list;
+    bool verbose = false;
 
     while(1)
     {
-        int result = getopt(argc, argv, "i:o:");
+        int result = getopt(argc, argv, "i:o:v");
         if (result == -1) break;
         switch (result)
         {
@@ -195,6 +196,9 @@ int main(int argc, char* const argv[])
             case 'o':
                 target_dir = optarg;
                 break;
+            case 'v':
+                verbose = true;
+                break;
             default: /* unknown */
                 break;
         }
@@ -205,6 +209,8 @@ int main(int argc, char* const argv[])
     if (!parseHosts(conf_file, &host_list)) return EXIT_FAILURE;
 
     host_list = writeConfigFiles(conf_file, target_dir, host_list);
+
+    if (!verbose) return EXIT_SUCCESS;
 
     if (host_list.size() > 0)
     {
@@ -225,6 +231,5 @@ int main(int argc, char* const argv[])
     {
         std::cout << "No virtual hosts found!" << std::endl;
     }
-
     return EXIT_SUCCESS;
 }
