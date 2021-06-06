@@ -7,6 +7,18 @@
 #include "include/TBBTools.h"
 #include "include/THosts.h"
 
+void usage()
+{
+    std::cout << "vhost_extractor v0.1\n";
+    std::cout << "Usage: vhost_extractor -i /path/to/apache.conf -o /path/to/output/dir\n\n";
+    std::cout << "Options:\n";
+    std::cout << "-i /path/to/apache.conf   - Full path to the configuration that you want to parse\n";
+    std::cout << "-o /path/to/output/dir    - Path where extracted vhost will be stored (if not exists, it will be created)\n";
+    std::cout << "-s servername             - Extract single configuration by ServerName (not yet implemented)\n";
+    std::cout << "-v                        - Verbose setting (prints out a result after parsing\n";
+    std::cout << "-h                        - Shows this help!\n\n";
+}
+
 std::string extractLastEntrybyDelimiter(std::string line, std::string delimiter, bool removeLastChar = false)
 {
     size_t pos = 0;
@@ -29,6 +41,7 @@ bool verifyArgs(std::string inputFile, std::string outputPath)
     if (inputFile == "" || outputPath == "")
     {
         std::cerr << "Syntax error! Please specify input file (-i) and output directory (-o)!" << std::endl;
+        usage();
         return false;
     }
 
@@ -166,7 +179,7 @@ int main(int argc, char* const argv[])
 
     while(1)
     {
-        int result = getopt(argc, argv, "i:o:v");
+        int result = getopt(argc, argv, "i:o:vh");
         if (result == -1) break;
         switch (result)
         {
@@ -184,6 +197,9 @@ int main(int argc, char* const argv[])
             case 'v':
                 verbose = true;
                 break;
+            case 'h':
+                usage();
+                return EXIT_SUCCESS;
             default: /* unknown */
                 break;
         }
