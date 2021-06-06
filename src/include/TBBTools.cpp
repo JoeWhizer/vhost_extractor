@@ -71,9 +71,12 @@ int TBBTools::getLineNumbers(std::string filename)
 std::string TBBTools::formatLine(int line, int maxlines)
 {
     std::string separator = "";
+    int diff = maxlines - line;
 
-    std::string response = "";
-    response = "Line " + separator;
+    for (int i = 0; i < diff; i++)
+    {
+        separator += "0";
+    }
 
-    return response;
+    return "Line " + separator + std::to_string(line) + ": ";
 }
