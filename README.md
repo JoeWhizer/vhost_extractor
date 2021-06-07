@@ -1,4 +1,4 @@
-# vhost_extractor 1.0
+# vhost_extractor 1.0 (boost version)
 Extractor for Apache virtual hosts
 
 This program is helpful to strip all or a single virtual host by servername from a huge apache configuration file.
