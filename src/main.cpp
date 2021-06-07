@@ -154,7 +154,7 @@ std::vector<THosts> writeConfigFiles(std::string inputFile, std::string outputPa
         try
         {
             infile.open(inputFile);
-            outfile.open(host_list[i].full_filename);
+            outfile.open(host_list[i].full_filename.string());
             int count = 0;
 
             for (std::string line; getline(infile, line); )

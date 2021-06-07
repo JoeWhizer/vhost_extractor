@@ -8,5 +8,5 @@ class THosts
         int end_line = 0;
         std::string server_name = "";
         std::string server_port = "";
-        std::filesystem::path full_filename = "";
+        boost::filesystem::path full_filename = "";
 };

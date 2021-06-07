@@ -2,6 +2,7 @@
 
 #include <string>
 #include <fstream>
+#include <boost/filesystem.hpp>
 
 class TBBTools 
 {
