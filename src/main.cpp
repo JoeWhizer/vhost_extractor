@@ -1,9 +1,9 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <filesystem>
 #include <unistd.h>
 #include <vector>
+#include <boost/filesystem.hpp>
 #include "include/TBBTools.h"
 #include "include/THosts.h"
 
@@ -45,18 +45,18 @@ bool verifyArgs(std::string inputFile, std::string outputPath)
         return false;
     }
 
-    if (!std::filesystem::exists(inputFile))
+    if (!boost::filesystem::exists(inputFile))
     {
         std::cout << "File not found: " << inputFile << std::endl;
         return false;
     }
 
-    if (!std::filesystem::exists(outputPath))
+    if (!boost::filesystem::exists(outputPath))
     {
         try
         {
             std::cout << "Path not found: " << outputPath << " - creating directory...";
-            std::filesystem::create_directories(outputPath);
+            boost::filesystem::create_directories(outputPath);
             std::cout << "done" << std::endl;
         }
         catch(const std::exception& e)
