@@ -38,11 +38,11 @@ void printOutput(std::vector<THosts> host_list)
         TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
         printf("ServerName: ");
         TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
-        printf("%s\t", host_list[i].server_name);
+        printf("%s\t", host_list[i].server_name.c_str());
         TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
         printf("Port: ");
         TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
-        printf("%s\n", host_list[i].server_port);
+        printf("%s\n", host_list[i].server_port.c_str());
         TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
         printf("From line ");
         TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
@@ -54,7 +54,7 @@ void printOutput(std::vector<THosts> host_list)
         TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
         printf("Filename: ");
         TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
-        printf("%s\n\n", host_list[i].full_filename);
+        printf("%s\n\n", host_list[i].full_filename.c_str());
     }
 }
 
