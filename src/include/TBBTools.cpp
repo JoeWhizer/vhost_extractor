@@ -3,6 +3,9 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <vector>
+#include <boost/filesystem.hpp>
+
 
 bool TBBTools::findString(std::string input, std::string text)
 {
@@ -121,4 +124,24 @@ bool TBBTools::checkHashtag(std::string line)
         return true;
     }
     return false;
+}
+
+std::vector<std::string> TBBTools::getFilesFromDirectory(boost::filesystem::path path, std::string ext)
+{
+    using namespace boost::filesystem;
+    std::vector<std::string> fileList;
+
+    directory_iterator end_itr;
+    for (directory_iterator itr(path); itr != end_itr; itr++)
+    {
+        if (is_regular_file(itr->path()))
+        {
+            std::string currentFile = itr->path().string();
+            if (toLower(ext) == toLower(extension(currentFile)))
+            {
+                fileList.push_back(currentFile);
+            }
+        }
+    }
+    return fileList;
 }

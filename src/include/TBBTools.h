@@ -17,4 +17,5 @@ class TBBTools
         static std::string trim(const std::string& str, const std::string& whitespace);
         static std::string reduce(const std::string& str,const std::string& fill,const std::string& whitespace);
         static bool checkHashtag(std::string line);
+        static std::vector<std::string> getFilesFromDirectory(boost::filesystem::path path, std::string ext);
 };
