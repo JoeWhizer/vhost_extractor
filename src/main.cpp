@@ -75,6 +75,19 @@ std::string extractLastEntrybyDelimiter(std::string line, std::string delimiter,
     return line;
 }
 
+std::string extractFirstEntrybyDelimiter(std::string line, std::string delimiter)
+{
+    size_t pos = 0;
+    std::string token = "";
+    std::string n_line = line;
+    while ((pos = n_line.find(delimiter)) != std::string::npos)
+    {
+        token = n_line.substr(0, pos);
+        return token;
+    }
+    return line;
+}
+
 bool verifyArgs(std::string inputFile, std::string outputPath)
 {
     if (inputFile == "" || outputPath == "")
@@ -150,6 +163,8 @@ bool parseHosts(std::string inputFile, std::vector<THosts> *host_list)
             else if (TBBTools::findString(n_line, "servername"))
             {
                 server_name = extractLastEntrybyDelimiter(n_line, " ");
+                if (TBBTools::findString(server_name, ":"))
+                    server_name = extractFirstEntrybyDelimiter(server_name, ":");
             }
 
             if (start > 0 && end > 0) 
