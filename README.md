@@ -38,6 +38,9 @@ Compile the program with the following command within src folder:
 ```
 g++ main.cpp include/TBBTools.cpp include/TBBConsole.cpp -o ../bin/vhost_extractor -std=c++11 -lboost_system -lboost_filesystem
 ```
+Or use the create.sh script to build and compile it with cmake. (don't forget to configure your cmake before, and adjust the project_path variable in the script)
+<br><br>
+
 For compilation you also need the devel-package of boost.
 
 **CentOS7**: yum install boost-devel
