@@ -56,20 +56,13 @@ int main(int argc, char* const argv[])
     }
 
     verifyArgs(conf_file, target_dir, conf_dir);
-
     parseHosts(conf_file, &host_list, conf_dir);
-
-    host_list = writeConfigFiles(conf_file, target_dir, host_list, vhost_to_extract);
-
-    if (!verbose) return EXIT_SUCCESS;
+    host_list = writeConfigFiles(target_dir, host_list, vhost_to_extract);
 
     if (host_list.size() > 0)
-    {
-        printOutput(host_list);
-    } 
+        printOutput(host_list, verbose);
     else 
-    {
         std::cout << "No virtual hosts found!" << std::endl;
-    }
+
     return EXIT_SUCCESS;
 }

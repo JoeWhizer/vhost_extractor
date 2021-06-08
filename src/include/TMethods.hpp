@@ -25,9 +25,11 @@ void usage()
     std::cout << "-h                        - Shows this help!\n\n";
 }
 
-void printOutput(std::vector<THosts> host_list)
+void printOutput(std::vector<THosts> host_list, bool verbose)
 {
     std::cout << host_list.size() << " virtual hosts found!\n\n";
+    if (!verbose) return;
+
     std::cout << "The following hosts were extracted:\n";
     for (int i = 0; i < host_list.size(); i++)
     {
@@ -136,13 +138,7 @@ void verifyArgs(std::string inputFile, std::string outputPath, std::string confD
 
 void parseHosts(std::string inputFile, std::vector<THosts> *host_list, std::string inputPath="")
 {
-    std::string server_name = "";
-    std::string server_port = "";
     std::vector<std::string> fileList;
-    int count = 0;
-    int start = 0;
-    int end  = 0;
-    int found = 0;
 
     if (inputPath != "")
     {
@@ -166,6 +162,13 @@ void parseHosts(std::string inputFile, std::vector<THosts> *host_list, std::stri
     {
         for (std::string file : fileList) 
         {
+            std::string server_name = "";
+            std::string server_port = "";
+            int count = 0;
+            int start = 0;
+            int end  = 0;
+            int found = 0;
+
             infile.open(file);
             for (std::string line; getline(infile, line); )
             {
@@ -200,6 +203,7 @@ void parseHosts(std::string inputFile, std::vector<THosts> *host_list, std::stri
                 {
                     found++;
                     THosts host;
+                    host.input_file = file;
                     host.start_line = start;
                     host.end_line = end;
                     host.server_name = server_name;
@@ -213,7 +217,6 @@ void parseHosts(std::string inputFile, std::vector<THosts> *host_list, std::stri
             }
             infile.close();
         }       
-        
     }
     catch  (const std::exception& e)
     {
@@ -222,7 +225,7 @@ void parseHosts(std::string inputFile, std::vector<THosts> *host_list, std::stri
     }
 }
 
-std::vector<THosts> writeConfigFiles(std::string inputFile, std::string outputPath,std::vector<THosts> host_list, std::string vhost_to_extract = "")
+std::vector<THosts> writeConfigFiles(std::string outputPath,std::vector<THosts> host_list, std::string vhost_to_extract = "")
 {
     std::ifstream infile;
     std::ofstream outfile;
@@ -242,7 +245,7 @@ std::vector<THosts> writeConfigFiles(std::string inputFile, std::string outputPa
         host_list[i].full_filename /= filename;
         try
         {
-            infile.open(inputFile);
+            infile.open(host_list[i].input_file);
             outfile.open(host_list[i].full_filename.string());
             int count = 0;
 
