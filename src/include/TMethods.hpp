@@ -93,8 +93,8 @@ std::string extractFirstEntrybyDelimiter(std::string line, std::string delimiter
 
 void verifyArgs(std::string inputFile, std::string outputPath, std::string confDir)
 {
-    if (inputFile == "" || confDir == "" || outputPath == "")
-    {
+    if ((inputFile == "" && confDir == "") || outputPath == "")
+    {   
         TBBConsole::setTextColor(Red_TXT);
         std::cerr << "Syntax error! Please specify input file/path and output directory!\n\n";
         TBBConsole::resetColor();
