@@ -22,6 +22,42 @@ void usage()
     std::cout << "-h                        - Shows this help!\n\n";
 }
 
+void printOutput(std::vector<THosts> host_list)
+{
+    std::cout << host_list.size() << " virtual hosts found!\n\n";
+    std::cout << "The following hosts were extracted:\n";
+    for (int i = 0; i < host_list.size(); i++)
+    {
+        if (host_list[i].full_filename == "")
+            continue;
+
+        if ( host_list[i].server_port == "" ) host_list[i].server_port = "N/A";
+
+        TBBConsole::setTextColor(ConsoleColors::Green_TXT);
+        printf("Server Nr. %d", i +1);
+        TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
+        printf("ServerName: ");
+        TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
+        printf("%s\t", host_list[i].server_name);
+        TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
+        printf("Port: ");
+        TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
+        printf("%s\n", host_list[i].server_port);
+        TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
+        printf("From line ");
+        TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
+        printf("%d ", host_list[i].start_line);
+        TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
+        printf("to line ");
+        TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
+        printf("%d \n", host_list[i].end_line);
+        TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
+        printf("Filename: ");
+        TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
+        printf("%s\n\n", host_list[i].full_filename);
+    }
+}
+
 std::string extractLastEntrybyDelimiter(std::string line, std::string delimiter, bool removeLastChar = false)
 {
     size_t pos = 0;
@@ -230,22 +266,7 @@ int main(int argc, char* const argv[])
 
     if (host_list.size() > 0)
     {
-        std::cout << host_list.size() << " virtual hosts found!\n\n";
-        std::cout << "The following hosts were extracted:\n";
-        for (int i = 0; i < host_list.size(); i++)
-        {
-            if (host_list[i].full_filename == "")
-                continue;
-
-            std::string separator = "\t\t - ";
-            if (host_list[i].server_name.size() >= 18) separator = "\t - ";
-            if ( host_list[i].server_port == "" ) host_list[i].server_port = "N/A";
-            std::cout << "Host: " << host_list[i].server_name << separator << 
-                         "Port: " << host_list[i].server_port <<
-                         " -- From line " << host_list[i].start_line << 
-                         " to line " << host_list[i].end_line << "\t\t - " <<
-                         "Filename: " << host_list[i].full_filename << std::endl;
-        }
+        printOutput(host_list);
     } 
     else 
     {
