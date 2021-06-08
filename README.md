@@ -44,4 +44,5 @@ Or use the create.sh script to build and compile it with cmake. (don't forget to
 For compilation you also need the devel-package of boost.
 
 **CentOS7**: yum install boost-devel
+
 **Arch**: pacman -Syu boost
