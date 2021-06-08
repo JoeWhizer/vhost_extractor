@@ -55,9 +55,9 @@ int main(int argc, char* const argv[])
         }
     }
 
-    if (!verifyArgs(conf_file, target_dir)) return EXIT_FAILURE;
+    verifyArgs(conf_file, target_dir, conf_dir);
 
-    if (!parseHosts(conf_file, &host_list)) return EXIT_FAILURE;
+    parseHosts(conf_file, &host_list, conf_dir);
 
     host_list = writeConfigFiles(conf_file, target_dir, host_list, vhost_to_extract);
 

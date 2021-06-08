@@ -91,23 +91,31 @@ std::string extractFirstEntrybyDelimiter(std::string line, std::string delimiter
     return line;
 }
 
-bool verifyArgs(std::string inputFile, std::string outputPath)
+void verifyArgs(std::string inputFile, std::string outputPath, std::string confDir)
 {
-    if (inputFile == "" || outputPath == "")
+    if (inputFile == "" || confDir == "" || outputPath == "")
     {
         TBBConsole::setTextColor(Red_TXT);
-        std::cerr << "Syntax error! Please specify input file (-i) and output directory (-o)!\n\n";
+        std::cerr << "Syntax error! Please specify input file/path and output directory!\n\n";
         TBBConsole::resetColor();
         usage();
-        return false;
+        exit(EXIT_FAILURE);
     }
 
-    if (!boost::filesystem::exists(inputFile))
+    if ((inputFile != "") && !boost::filesystem::exists(inputFile))
     {
         TBBConsole::setTextColor(Red_TXT);
         std::cerr << "File not found: " << inputFile << std::endl;
-        return false;
         TBBConsole::resetColor();
+        exit(EXIT_FAILURE);
+    }
+
+    if ((confDir != "") && !boost::filesystem::exists(confDir))
+    {
+        TBBConsole::setTextColor(Red_TXT);
+        std::cerr << "Path not found: " << inputFile << std::endl;
+        TBBConsole::resetColor();
+        exit(EXIT_FAILURE);
     }
 
     if (!boost::filesystem::exists(outputPath))
@@ -121,13 +129,12 @@ bool verifyArgs(std::string inputFile, std::string outputPath)
         catch(const std::exception& e)
         {
             std::cerr << e.what() << '\n';
-            return false;
+            exit(EXIT_FAILURE);
         }
     }
-    return true;
 }
 
-bool parseHosts(std::string inputFile, std::vector<THosts> *host_list, std::string inputPath="")
+void parseHosts(std::string inputFile, std::vector<THosts> *host_list, std::string inputPath="")
 {
     std::string server_name = "";
     std::string server_port = "";
@@ -211,9 +218,8 @@ bool parseHosts(std::string inputFile, std::vector<THosts> *host_list, std::stri
     catch  (const std::exception& e)
     {
         std::cerr << e.what() << '\n';
-        return false;
+        exit(EXIT_FAILURE);
     }
-    return true;
 }
 
 std::vector<THosts> writeConfigFiles(std::string inputFile, std::string outputPath,std::vector<THosts> host_list, std::string vhost_to_extract = "")
