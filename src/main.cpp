@@ -149,7 +149,7 @@ bool parseHosts(std::string inputFile, std::vector<THosts> *host_list)
             }
             else if (TBBTools::findString(n_line, "servername"))
             {
-                server_name = extractLastEntrybyDelimiter(n_line, "=");
+                server_name = extractLastEntrybyDelimiter(n_line, " ");
             }
 
             if (start > 0 && end > 0) 
