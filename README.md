@@ -18,3 +18,27 @@ This program is helpful to strip all or a single virtual host by servername from
 -v&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;- Verbose setting (prints out a result after parsing
 
 -h&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;- Shows this help!
+<br><br>
+
+## Dependencies:
+
+You need to install boost lib package.
+
+**CentOS:**
+yum install boost
+
+
+**Arch:**
+pacman -Syu boost-libs
+<br><br>
+
+## Compilation
+
+Compile the program with the following command within src folder:
+```
+g++ main.cpp include/TBBTools.cpp include/TBBConsole.cpp -o ../bin/vhost_extractor -std=c++11 -lboost_system -lboost_filesystem
+```
+For compilation you also need the devel-package of boost.
+
+**CentOS7**: yum install boost-devel
+**Arch**: pacman -Syu boost
