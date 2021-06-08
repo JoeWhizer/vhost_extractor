@@ -5,11 +5,14 @@
 #include <vector>
 #include <boost/filesystem.hpp>
 #include "include/TBBTools.h"
+#include "include/TBBConsole.h"
 #include "include/THosts.h"
 
 void usage()
 {
-    std::cout << "vhost_extractor v1.0\n";
+    TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
+    std::cout << "vhost_extractor v1.01\n";
+    TBBConsole::resetColor();
     std::cout << "Usage: vhost_extractor -i /path/to/apache.conf -o /path/to/output/dir\n\n";
     std::cout << "Options:\n";
     std::cout << "-i /path/to/apache.conf   - Full path to the configuration that you want to parse\n";
@@ -40,15 +43,19 @@ bool verifyArgs(std::string inputFile, std::string outputPath)
 {
     if (inputFile == "" || outputPath == "")
     {
-        std::cerr << "Syntax error! Please specify input file (-i) and output directory (-o)!" << std::endl;
+        TBBConsole::setTextColor(Red_TXT);
+        std::cerr << "Syntax error! Please specify input file (-i) and output directory (-o)!\n\n";
+        TBBConsole::resetColor();
         usage();
         return false;
     }
 
     if (!boost::filesystem::exists(inputFile))
     {
-        std::cout << "File not found: " << inputFile << std::endl;
+        TBBConsole::setTextColor(Red_TXT);
+        std::cerr << "File not found: " << inputFile << std::endl;
         return false;
+        TBBConsole::resetColor();
     }
 
     if (!boost::filesystem::exists(outputPath))

@@ -1,5 +1,5 @@
 #!/bin/bash
-project_path="/media/DevHDD/C++/vhost_extractor"
+project_path="/media/DevHDD/C++/vhost_extractor_boost"
 
 if [ ! -d "$project_path/build" ]
 then
