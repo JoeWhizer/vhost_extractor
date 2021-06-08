@@ -265,3 +265,48 @@ std::vector<THosts> writeConfigFiles(std::string outputPath,std::vector<THosts> 
 
     return host_list;
 }
+
+void insertVhostAtPosition(THosts host, std::string filename, int position, bool backup = true)
+{
+    std::ifstream infile;
+    std::ifstream orgfile;
+    std::ofstream outfile;
+    boost::filesystem::path tmppath = boost::filesystem::unique_path();
+
+    boost::filesystem::copy_file(filename, tmppath.c_str());
+
+    infile.open(host.input_file);
+    orgfile.open(filename);
+    outfile.open(tmppath.native());
+
+    int in_count = 0;
+    int out_count = 0;
+    for (std::string org_line; getline(orgfile, org_line); )
+    {
+        in_count++;
+        if (in_count < position)
+        {
+            outfile << org_line << std::endl;
+        }
+        else if (in_count == position)
+        {
+            for (std::string line; getline(infile, line); )
+            {
+                outfile << line << std::endl;
+            }
+        }
+        else
+        {
+            outfile << org_line << std::endl;
+        }
+    }
+
+    if (backup)
+    {
+        boost::filesystem::copy_file(filename, filename + "_bak");
+    }
+
+    const char* f = filename.c_str();
+    remove(f);
+    rename(tmppath.c_str(), f);
+}
