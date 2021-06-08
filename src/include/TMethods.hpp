@@ -18,7 +18,7 @@ void usage()
     std::cout << "-i /path/to/apache.conf   - Full path to the configuration that you want to parse\n";
     std::cout << "-o /path/to/output/dir    - Path where extracted vhost will be stored (if not exists, it will be created)\n";
     std::cout << "-s servername             - Extract single configuration by ServerName\n";
-    std::cout << "-d /path/to/input/dir	    - parse all .conf files in this directory\n";
+    std::cout << "-d /path/to/input/dir     - parse all .conf files in this directory\n";
     std::cout << "-r /path/to/vhost.conf    - replace vhost configuration with configuration in apache.conf (only working with -w)\n";
     std::cout << "-w /path/to/apache.conf   - replace vhost from -r option to this apache.conf\n";
     std::cout << "-v                        - Verbose setting (prints out a result after parsing\n";
