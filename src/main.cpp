@@ -8,11 +8,16 @@ int main(int argc, char* const argv[])
     std::string target_dir="";
     std::vector<THosts> host_list;
     std::string vhost_to_extract="";
+    std::string conf_dir="";
+    std::string vhost_to_replace="";
+    std::string output_conf="";
     bool verbose = false;
+    bool replaceMode = false;
+    bool directoryMode = false;
 
     while(1)
     {
-        int result = getopt(argc, argv, "i:o:s:vh");
+        int result = getopt(argc, argv, "i:o:s:d:r:w:vh");
         if (result == -1) break;
         switch (result)
         {
@@ -29,6 +34,15 @@ int main(int argc, char* const argv[])
                 break;
             case 's':
                 vhost_to_extract = optarg;
+                break;
+            case 'd':
+                conf_dir = optarg;
+                break;
+            case 'r':
+                vhost_to_replace = optarg;
+                break;
+            case 'w':
+                output_conf = optarg;
                 break;
             case 'v':
                 verbose = true;
