@@ -127,64 +127,86 @@ bool verifyArgs(std::string inputFile, std::string outputPath)
     return true;
 }
 
-bool parseHosts(std::string inputFile, std::vector<THosts> *host_list)
+bool parseHosts(std::string inputFile, std::vector<THosts> *host_list, std::string inputPath="")
 {
     std::string server_name = "";
     std::string server_port = "";
+    std::vector<std::string> fileList;
     int count = 0;
     int start = 0;
     int end  = 0;
     int found = 0;
 
+    if (inputPath != "")
+    {
+        fileList = TBBTools::getFilesFromDirectory(inputPath, ".conf");
+
+        if (fileList.size() == 0) 
+        {
+            TBBConsole::setTextColor(ConsoleColors::Red_TXT);
+            std::cerr << "No '.conf'-files found in path: " << inputPath << std::endl;
+            TBBConsole::resetColor();
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    if (inputFile != "" && fileList.size() == 0)
+        fileList.push_back(inputFile);
+
     std::ifstream infile;
     infile.exceptions(std::ifstream::badbit);
     try
     {
-        infile.open(inputFile);
-        for (std::string line; getline(infile, line); )
+        for (std::string file : fileList) 
         {
-            count++;
-            std::string n_line = TBBTools::toLower(TBBTools::trim(line, " \t"));
-            if (n_line.size() > 0 && TBBTools::checkHashtag(n_line)) continue;            
-            if (TBBTools::findString(n_line, "<virtualhost"))
+            infile.open(file);
+            for (std::string line; getline(infile, line); )
             {
-                start = count;
-                if (end > 0)
+                count++;
+                std::string n_line = TBBTools::toLower(TBBTools::trim(line, " \t"));
+                if (n_line.size() > 0 && TBBTools::checkHashtag(n_line)) continue;            
+                if (TBBTools::findString(n_line, "<virtualhost"))
                 {
+                    start = count;
+                    if (end > 0)
+                    {
+                        end = 0;
+                    }
+
+                    if (TBBTools::findString(n_line, ":"))
+                    {
+                        server_port = extractLastEntrybyDelimiter(n_line, ":", true);
+                    }
+                } 
+                else if (TBBTools::findString(n_line, "</virtualhost>")) 
+                {
+                    end = count;
+                }
+                else if (TBBTools::findString(n_line, "servername"))
+                {
+                    server_name = extractLastEntrybyDelimiter(n_line, " ");
+                    if (TBBTools::findString(server_name, ":"))
+                        server_name = extractFirstEntrybyDelimiter(server_name, ":");
+                }
+
+                if (start > 0 && end > 0) 
+                {
+                    found++;
+                    THosts host;
+                    host.start_line = start;
+                    host.end_line = end;
+                    host.server_name = server_name;
+                    host.server_port = server_port;
+                    host_list->push_back(host);
+                    start = 0;
                     end = 0;
+                    server_name = "";
+                    server_port = "";
                 }
-
-                if (TBBTools::findString(n_line, ":"))
-                {
-                    server_port = extractLastEntrybyDelimiter(n_line, ":", true);
-                }
-            } 
-            else if (TBBTools::findString(n_line, "</virtualhost>")) 
-            {
-                end = count;
             }
-            else if (TBBTools::findString(n_line, "servername"))
-            {
-                server_name = extractLastEntrybyDelimiter(n_line, " ");
-                if (TBBTools::findString(server_name, ":"))
-                    server_name = extractFirstEntrybyDelimiter(server_name, ":");
-            }
-
-            if (start > 0 && end > 0) 
-            {
-                found++;
-                THosts host;
-                host.start_line = start;
-                host.end_line = end;
-                host.server_name = server_name;
-                host.server_port = server_port;
-                host_list->push_back(host);
-                start = 0;
-                end = 0;
-                server_name = "";
-                server_port = "";
-            }
-        }
+            infile.close();
+        }       
+        
     }
     catch  (const std::exception& e)
     {
