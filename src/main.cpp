@@ -11,7 +11,7 @@
 void usage()
 {
     TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
-    std::cout << "vhost_extractor v1.01\n";
+    std::cout << "vhost_extractor v1.1\n";
     TBBConsole::resetColor();
     std::cout << "Usage: vhost_extractor -i /path/to/apache.conf -o /path/to/output/dir\n\n";
     std::cout << "Options:\n";
