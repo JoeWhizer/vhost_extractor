@@ -34,11 +34,11 @@ void printOutput(std::vector<THosts> host_list)
         if ( host_list[i].server_port == "" ) host_list[i].server_port = "N/A";
 
         TBBConsole::setTextColor(ConsoleColors::Green_TXT);
-        printf("Server Nr. %d", i +1);
+        printf("Server Nr. %d\n", i +1);
         TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
         printf("ServerName: ");
         TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
-        printf("%s\t", host_list[i].server_name.c_str());
+        printf("%s\n", host_list[i].server_name.c_str());
         TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
         printf("Port: ");
         TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
