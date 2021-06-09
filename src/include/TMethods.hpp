@@ -27,44 +27,51 @@ void usage()
 
 void printOutput(std::vector<THosts> host_list, bool verbose)
 {
-    std::cout << host_list.size() << " virtual hosts found!\n\n";
-    if (!verbose) return;
+    std::cout << host_list.size() << " virtual host(s) found!\n\n";
 
-    std::cout << "The following hosts were extracted:\n";
+    if (verbose)
+        std::cout << "The following host(s) were extracted:\n";
+    
+    int count = 0;
     for (int i = 0; i < host_list.size(); i++)
     {
         if (host_list[i].full_filename == "")
             continue;
 
+        count++;
         if ( host_list[i].server_port == "" ) host_list[i].server_port = "N/A";
 
-        TBBConsole::setTextColor(ConsoleColors::Green_TXT);
-        printf("Server Nr. %d\n", i +1);
-        TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
-        printf("ServerName: ");
-        TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
-        printf("%s\n", host_list[i].server_name.c_str());
-        TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
-        printf("Port: ");
-        TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
-        printf("%s\n", host_list[i].server_port.c_str());
-        TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
-        printf("From line ");
-        TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
-        printf("%d ", host_list[i].start_line);
-        TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
-        printf("to line ");
-        TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
-        printf("%d \n", host_list[i].end_line);
-        TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
-        printf("Filename: ");
-        TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
-        printf("%s\n", host_list[i].full_filename.c_str());
-        TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
-        printf("Source: ");
-        TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
-        printf("%s\n\n", host_list[i].input_file.c_str());
+        if (verbose)
+        {
+            TBBConsole::setTextColor(ConsoleColors::Green_TXT);
+            printf("Server Nr. %d\n", i +1);
+            TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
+            printf("ServerName: ");
+            TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
+            printf("%s\n", host_list[i].server_name.c_str());
+            TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
+            printf("Port: ");
+            TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
+            printf("%s\n", host_list[i].server_port.c_str());
+            TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
+            printf("From line ");
+            TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
+            printf("%d ", host_list[i].start_line);
+            TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
+            printf("to line ");
+            TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
+            printf("%d \n", host_list[i].end_line);
+            TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
+            printf("Filename: ");
+            TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
+            printf("%s\n", host_list[i].full_filename.c_str());
+            TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
+            printf("Source: ");
+            TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
+            printf("%s\n\n", host_list[i].input_file.c_str());
+        }
     }
+    std::cout << count << " virtual host(s) extracted!\n";
 }
 
 std::string extractLastEntrybyDelimiter(std::string line, std::string delimiter, bool removeLastChar = false)
