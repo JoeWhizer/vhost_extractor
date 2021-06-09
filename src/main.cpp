@@ -67,8 +67,20 @@ int main(int argc, char* const argv[])
     }
     else
     {
+        std::vector<THosts> n_host_list;
+
         parseHosts(vhost_to_replace, &host_list);
-        insertVhostAtPosition(host_list[0], output_conf, host_list[0].start_line, backup);
+        parseHosts(output_conf, &n_host_list);
+        int start = 0;
+        for (int i = 0; i < n_host_list.size(); i++)
+        {
+            if ((n_host_list[i].server_name == host_list[0].server_name) && (n_host_list[i].server_port == host_list[0].server_port))
+            {
+                start = n_host_list[i].start_line;
+                break;
+            }
+        }
+        insertVhostAtPosition(host_list[0], output_conf, start, backup);
     }
 
     if (host_list.size() > 0)
