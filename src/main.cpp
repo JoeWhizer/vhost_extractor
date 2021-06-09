@@ -37,12 +37,15 @@ int main(int argc, char* const argv[])
                 break;
             case 'd':
                 conf_dir = optarg;
+                directoryMode = true;
                 break;
             case 'r':
                 vhost_to_replace = optarg;
+                replaceMode = true;
                 break;
             case 'w':
                 output_conf = optarg;
+                replaceMode = true;
                 break;
             case 'v':
                 verbose = true;
@@ -55,7 +58,7 @@ int main(int argc, char* const argv[])
         }
     }
 
-    verifyArgs(conf_file, target_dir, conf_dir);
+    verifyArgs(conf_file, target_dir, conf_dir, output_conf, vhost_to_replace, directoryMode, replaceMode);
     parseHosts(conf_file, &host_list, conf_dir);
     host_list = writeConfigFiles(target_dir, host_list, vhost_to_extract);
 

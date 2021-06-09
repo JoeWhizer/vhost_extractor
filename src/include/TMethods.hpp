@@ -20,7 +20,7 @@ void usage()
     std::cout << "-s servername             - Extract single configuration by ServerName\n";
     std::cout << "-d /path/to/input/dir     - parse all .conf files in this directory\n";
     std::cout << "-r /path/to/vhost.conf    - replace vhost configuration with configuration in apache.conf (only working with -w)\n";
-    std::cout << "-w /path/to/apache.conf   - replace vhost from -r option to this apache.conf\n";
+    std::cout << "-w /path/to/apache.conf   - replace vhost from -r option to this apache.conf (only working with -r)\n";
     std::cout << "-v                        - Verbose setting (prints out a result after parsing\n";
     std::cout << "-h                        - Shows this help!\n\n";
 }
@@ -93,9 +93,12 @@ std::string extractFirstEntrybyDelimiter(std::string line, std::string delimiter
     return line;
 }
 
-void verifyArgs(std::string inputFile, std::string outputPath, std::string confDir)
+void verifyArgs(std::string inputFile, std::string outputPath, std::string confDir,
+ std::string output_conf="", std::string vhost_to_replace="", bool dirMode = false, bool replaceMode = false)
 {
-    if ((inputFile == "" && confDir == "") || outputPath == "")
+    if (((inputFile == "" && confDir == "") || outputPath == "") || 
+        (dirMode && (confDir == "" || outputPath == "")) ||
+        (replaceMode && (output_conf == "" || vhost_to_replace == "")))
     {   
         TBBConsole::setTextColor(Red_TXT);
         std::cerr << "Syntax error! Please specify input file/path and output directory!\n\n";
@@ -107,16 +110,18 @@ void verifyArgs(std::string inputFile, std::string outputPath, std::string confD
     if ((inputFile != "") && !boost::filesystem::exists(inputFile))
     {
         TBBConsole::setTextColor(Red_TXT);
-        std::cerr << "File not found: " << inputFile << std::endl;
+        std::cerr << "File not found: ";
         TBBConsole::resetColor();
+        std::cerr << inputFile << std::endl;
         exit(EXIT_FAILURE);
     }
 
     if ((confDir != "") && !boost::filesystem::exists(confDir))
     {
         TBBConsole::setTextColor(Red_TXT);
-        std::cerr << "Path not found: " << inputFile << std::endl;
+        std::cerr << "Path not found: ";
         TBBConsole::resetColor();
+        std::cerr << confDir << std::endl;
         exit(EXIT_FAILURE);
     }
 
