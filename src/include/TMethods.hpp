@@ -107,28 +107,45 @@ std::string extractFirstEntrybyDelimiter(std::string line, std::string delimiter
 void verifyArgs(std::string inputFile, std::string outputPath, std::string confDir,
  std::string output_conf="", std::string vhost_to_replace="", bool dirMode = false, bool replaceMode = false)
 {
-    if (((inputFile == "" && confDir == "") || outputPath == "") || 
-        (dirMode && (confDir == "" || outputPath == "")) ||
-        (replaceMode && (output_conf == "" || vhost_to_replace == "")))
-    {   
-        TBBTools::printError("Syntax error", "Please specify input file/path and output directory!");
-        usage();
-        exit(EXIT_FAILURE);
-    }
-
-    if ((inputFile != "") && !boost::filesystem::exists(inputFile))
+    if (!replaceMode) 
     {
-        TBBTools::printError("File not found", inputFile);
-        exit(EXIT_FAILURE);
-    }
+        if (((inputFile == "" && confDir == "") || outputPath == "") || 
+            (dirMode && (confDir == "" || outputPath == "")) ||
+            (replaceMode && (output_conf == "" || vhost_to_replace == "")))
+        {   
+            TBBTools::printError("Syntax error", "Please specify input file/path and output directory!");
+            usage();
+            exit(EXIT_FAILURE);
+        }
 
-    if (dirMode && !boost::filesystem::exists(confDir))
-    {
-        TBBTools::printError("Path not found", confDir);
-        exit(EXIT_FAILURE);
-    }
+        if ((inputFile != "") && !boost::filesystem::exists(inputFile))
+        {
+            TBBTools::printError("File not found", inputFile);
+            exit(EXIT_FAILURE);
+        }
 
-    if (replaceMode && !boost::filesystem::exists(vhost_to_replace))
+        if (dirMode && !boost::filesystem::exists(confDir))
+        {
+            TBBTools::printError("Path not found", confDir);
+            exit(EXIT_FAILURE);
+        }
+
+        if (!boost::filesystem::exists(outputPath))
+        {
+            try
+            {
+                std::cout << "Path not found: " << outputPath << " - creating directory...";
+                boost::filesystem::create_directories(outputPath);
+                std::cout << "done" << std::endl;
+            }
+            catch(const std::exception& e)
+            {
+                std::cerr << e.what() << '\n';
+                exit(EXIT_FAILURE);
+            }
+        }
+    }
+    else if (replaceMode && !boost::filesystem::exists(vhost_to_replace))
     {
         TBBTools::printError("File not found", vhost_to_replace);
         exit(EXIT_FAILURE);
@@ -137,21 +154,6 @@ void verifyArgs(std::string inputFile, std::string outputPath, std::string confD
     {
         TBBTools::printError("File not found", output_conf);
         exit(EXIT_FAILURE);
-    }
-
-    if (!boost::filesystem::exists(outputPath))
-    {
-        try
-        {
-            std::cout << "Path not found: " << outputPath << " - creating directory...";
-            boost::filesystem::create_directories(outputPath);
-            std::cout << "done" << std::endl;
-        }
-        catch(const std::exception& e)
-        {
-            std::cerr << e.what() << '\n';
-            exit(EXIT_FAILURE);
-        }
     }
 }
 
