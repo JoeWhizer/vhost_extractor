@@ -68,7 +68,7 @@ int main(int argc, char* const argv[])
     else
     {
         parseHosts(vhost_to_replace, &host_list);
-        insertVhostAtPosition(host_list[0], output_conf, backup);
+        insertVhostAtPosition(host_list[0], output_conf, host_list[0].start_line, backup);
     }
 
     if (host_list.size() > 0)
