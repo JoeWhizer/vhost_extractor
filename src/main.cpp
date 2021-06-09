@@ -59,8 +59,15 @@ int main(int argc, char* const argv[])
     }
 
     verifyArgs(conf_file, target_dir, conf_dir, output_conf, vhost_to_replace, directoryMode, replaceMode);
-    parseHosts(conf_file, &host_list, conf_dir);
-    host_list = writeConfigFiles(target_dir, host_list, vhost_to_extract);
+    
+    if (!replaceMode) {
+        parseHosts(conf_file, &host_list, conf_dir);
+        host_list = writeConfigFiles(target_dir, host_list, vhost_to_extract);
+    }
+    else
+    {
+        
+    }
 
     if (host_list.size() > 0)
         printOutput(host_list, verbose);
