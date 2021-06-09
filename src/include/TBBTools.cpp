@@ -175,7 +175,7 @@ void TBBTools::removeLinesFromFile(std::string filename, int start, int end, boo
 
         if (backup)
         {
-            boost::filesystem::copy_file(filename, filename + "_bak");
+            boost::filesystem::copy_file(filename, filename + "_rbak");
         }
 
         const char* f = filename.c_str();

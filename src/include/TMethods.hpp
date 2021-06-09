@@ -292,6 +292,8 @@ void insertVhostAtPosition(THosts host, std::string filename, int position, bool
     std::ofstream outfile;
     boost::filesystem::path tmppath = boost::filesystem::unique_path();
 
+    TBBTools::removeLinesFromFile(filename, host.start_line, host.end_line, backup);
+
     try
     {
         boost::filesystem::copy_file(filename, tmppath.c_str());
@@ -324,7 +326,7 @@ void insertVhostAtPosition(THosts host, std::string filename, int position, bool
 
         if (backup)
         {
-            boost::filesystem::copy_file(filename, filename + "_bak");
+            boost::filesystem::copy_file(filename, filename + "_ibak");
         }
 
         const char* f = filename.c_str();
@@ -337,3 +339,4 @@ void insertVhostAtPosition(THosts host, std::string filename, int position, bool
         exit(EXIT_FAILURE);
     }
 }
+

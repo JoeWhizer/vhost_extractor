@@ -11,6 +11,7 @@ int main(int argc, char* const argv[])
     std::string conf_dir="";
     std::string vhost_to_replace="";
     std::string output_conf="";
+    bool backup = true;
     bool verbose = false;
     bool replaceMode = false;
     bool directoryMode = false;
@@ -66,7 +67,8 @@ int main(int argc, char* const argv[])
     }
     else
     {
-        
+        parseHosts(vhost_to_replace, &host_list);
+        insertVhostAtPosition(host_list[0], output_conf, backup);
     }
 
     if (host_list.size() > 0)
