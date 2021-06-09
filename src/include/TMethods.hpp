@@ -100,45 +100,31 @@ void verifyArgs(std::string inputFile, std::string outputPath, std::string confD
         (dirMode && (confDir == "" || outputPath == "")) ||
         (replaceMode && (output_conf == "" || vhost_to_replace == "")))
     {   
-        TBBConsole::setTextColor(Red_TXT);
-        std::cerr << "Syntax error! Please specify input file/path and output directory!\n\n";
-        TBBConsole::resetColor();
+        TBBTools::printError("Syntax error", "Please specify input file/path and output directory!");
         usage();
         exit(EXIT_FAILURE);
     }
 
     if ((inputFile != "") && !boost::filesystem::exists(inputFile))
     {
-        TBBConsole::setTextColor(Red_TXT);
-        std::cerr << "File not found: ";
-        TBBConsole::resetColor();
-        std::cerr << inputFile << std::endl;
+        TBBTools::printError("File not found", inputFile);
         exit(EXIT_FAILURE);
     }
 
     if (dirMode && !boost::filesystem::exists(confDir))
     {
-        TBBConsole::setTextColor(Red_TXT);
-        std::cerr << "Path not found: ";
-        TBBConsole::resetColor();
-        std::cerr << confDir << std::endl;
+        TBBTools::printError("Path not found", confDir);
         exit(EXIT_FAILURE);
     }
 
     if (replaceMode && !boost::filesystem::exists(vhost_to_replace))
     {
-        TBBConsole::setTextColor(Red_TXT);
-        std::cerr << "File not found: ";
-        TBBConsole::resetColor();
-        std::cerr << vhost_to_replace << std::endl;
+        TBBTools::printError("File not found", vhost_to_replace);
         exit(EXIT_FAILURE);
     }
     else if (replaceMode && !boost::filesystem::exists(output_conf))
     {
-        TBBConsole::setTextColor(Red_TXT);
-        std::cerr << "File not found: ";
-        TBBConsole::resetColor();
-        std::cerr << output_conf << std::endl;
+        TBBTools::printError("File not found", output_conf);
         exit(EXIT_FAILURE);
     }
 

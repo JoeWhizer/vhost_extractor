@@ -1,4 +1,5 @@
 #include "TBBTools.h"
+#include "TBBConsole.h"
 #include <algorithm>
 #include <string>
 #include <fstream>
@@ -186,4 +187,12 @@ void TBBTools::removeLinesFromFile(std::string filename, int start, int end, boo
         std::cerr << e.what() << '\n';
         exit(EXIT_FAILURE);
     }
+}
+
+void TBBTools::printError(std::string title, std::string message)
+{
+    TBBConsole::setTextColor(Red_TXT);
+    std::cerr << title << ": ";
+    TBBConsole::resetColor();
+    std::cerr << message << std::endl;
 }
