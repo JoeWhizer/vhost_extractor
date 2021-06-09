@@ -59,7 +59,11 @@ void printOutput(std::vector<THosts> host_list, bool verbose)
         TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
         printf("Filename: ");
         TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
-        printf("%s\n\n", host_list[i].full_filename.c_str());
+        printf("%s\n", host_list[i].full_filename.c_str());
+        TBBConsole::setTextColor(ConsoleColors::Yellow_TXT);
+        printf("Source: ");
+        TBBConsole::setTextColor(ConsoleColors::BrightWhite_TXT);
+        printf("%s\n\n", host_list[i].input_file.c_str());
     }
 }
 
