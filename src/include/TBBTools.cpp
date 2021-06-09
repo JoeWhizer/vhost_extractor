@@ -131,17 +131,25 @@ std::vector<std::string> TBBTools::getFilesFromDirectory(boost::filesystem::path
     using namespace boost::filesystem;
     std::vector<std::string> fileList;
 
-    directory_iterator end_itr;
-    for (directory_iterator itr(path); itr != end_itr; itr++)
+    try
     {
-        if (is_regular_file(itr->path()))
+        directory_iterator end_itr;
+        for (directory_iterator itr(path); itr != end_itr; itr++)
         {
-            std::string currentFile = itr->path().string();
-            if (toLower(ext) == toLower(extension(currentFile)))
+            if (is_regular_file(itr->path()))
             {
-                fileList.push_back(currentFile);
+                std::string currentFile = itr->path().string();
+                if (toLower(ext) == toLower(extension(currentFile)))
+                {
+                    fileList.push_back(currentFile);
+                }
             }
         }
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+        exit(EXIT_FAILURE);
     }
     return fileList;
 }
