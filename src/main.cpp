@@ -80,7 +80,10 @@ int main(int argc, char* const argv[])
                 break;
             }
         }
-        insertVhostAtPosition(host_list[0], output_conf, start, backup);
+        if (start > 0)
+            insertVhostAtPosition(host_list[0], output_conf, start, backup);
+        else
+            TBBTools::printError("Error", "couldn't insert vhost!");
     }
 
     if (host_list.size() > 0)
