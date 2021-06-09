@@ -3,7 +3,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 cmake_minimum_required(VERSION 2.8...3.20)
-project(vhost_extractor VERSION 1.1)
+project(vhost_extractor VERSION 1.2)
 
 find_package(Boost REQUIRED COMPONENTS filesystem system REQUIRED)
 
