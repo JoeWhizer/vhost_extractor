@@ -278,40 +278,48 @@ void insertVhostAtPosition(THosts host, std::string filename, int position, bool
     std::ofstream outfile;
     boost::filesystem::path tmppath = boost::filesystem::unique_path();
 
-    boost::filesystem::copy_file(filename, tmppath.c_str());
-
-    infile.open(host.input_file);
-    orgfile.open(filename);
-    outfile.open(tmppath.native());
-
-    int in_count = 0;
-    int out_count = 0;
-    for (std::string org_line; getline(orgfile, org_line); )
+    try
     {
-        in_count++;
-        if (in_count < position)
+        boost::filesystem::copy_file(filename, tmppath.c_str());
+
+        infile.open(host.input_file);
+        orgfile.open(filename);
+        outfile.open(tmppath.native());
+
+        int in_count = 0;
+        int out_count = 0;
+        for (std::string org_line; getline(orgfile, org_line); )
         {
-            outfile << org_line << std::endl;
-        }
-        else if (in_count == position)
-        {
-            for (std::string line; getline(infile, line); )
+            in_count++;
+            if (in_count < position)
             {
-                outfile << line << std::endl;
+                outfile << org_line << std::endl;
+            }
+            else if (in_count == position)
+            {
+                for (std::string line; getline(infile, line); )
+                {
+                    outfile << line << std::endl;
+                }
+            }
+            else
+            {
+                outfile << org_line << std::endl;
             }
         }
-        else
+
+        if (backup)
         {
-            outfile << org_line << std::endl;
+            boost::filesystem::copy_file(filename, filename + "_bak");
         }
-    }
 
-    if (backup)
+        const char* f = filename.c_str();
+        remove(f);
+        rename(tmppath.c_str(), f);
+    }
+    catch(const std::exception& e)
     {
-        boost::filesystem::copy_file(filename, filename + "_bak");
+        std::cerr << e.what() << '\n';
+        exit(EXIT_FAILURE);
     }
-
-    const char* f = filename.c_str();
-    remove(f);
-    rename(tmppath.c_str(), f);
 }

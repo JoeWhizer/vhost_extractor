@@ -152,22 +152,30 @@ void TBBTools::removeLinesFromFile(std::string filename, int start, int end, boo
     std::ofstream outfile;
     boost::filesystem::path tmppath = boost::filesystem::unique_path();
     
-    infile.open(filename);
-    outfile.open(tmppath.native());
-
-    int count = 0;
-    for (std::string line; getline(infile, line); )
+    try
     {
-        if (!TBBTools::inRange(start, end, ++count))
-            outfile << line << std::endl;
-    }
+        infile.open(filename);
+        outfile.open(tmppath.native());
 
-    if (backup)
+        int count = 0;
+        for (std::string line; getline(infile, line); )
+        {
+            if (!TBBTools::inRange(start, end, ++count))
+                outfile << line << std::endl;
+        }
+
+        if (backup)
+        {
+            boost::filesystem::copy_file(filename, filename + "_bak");
+        }
+
+        const char* f = filename.c_str();
+        remove(f);
+        rename(tmppath.c_str(), f);
+    }
+    catch(const std::exception& e)
     {
-        boost::filesystem::copy_file(filename, filename + "_bak");
+        std::cerr << e.what() << '\n';
+        exit(EXIT_FAILURE);
     }
-
-    const char* f = filename.c_str();
-    remove(f);
-    rename(tmppath.c_str(), f);
 }
